@@ -1,0 +1,46 @@
+// Static tasks configuration.
+//
+// Example:
+[
+  {
+    "label": "Configure",
+    "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" & conan install . -s build_type=Debug & cmake",
+    // "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" & conan install . -s build_type=Release & cmake",
+    "args": ["-S", ".", "--preset", "conan-debug"],
+    // "args": ["-S", ".", "--preset", "conan-release"],
+    // "args": ["-S", ".", "--preset", "conan-default"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "on_success",
+    "shell": {
+      "program": "cmd"
+    }
+  },
+  {
+    "label": "Build",
+    "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" & cmake",
+    "args": ["--build", "build\\Debug"],
+    // "args": ["--build", "build\\Release"],
+    // "args": ["--build", "build", "--preset", "conan-release"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "on_success",
+    "shell": {
+      "program": "cmd"
+    }
+  },
+  {
+    "label": "Run",
+    // "command": "./build/Release/test.exe",
+    "command": "./build/Debug/test.exe",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": true,
+    "reveal": "always",
+    "hide": "never",
+    "shell": {
+      "program": "pwsh"
+    }
+  }
+]
