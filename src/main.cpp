@@ -108,7 +108,6 @@ int main()
 {
     B b;
 
-
     Document doc;
     auto entity_b{doc.AddObject(std::move(b))};
     auto entity_a{doc.AddObject(A{})};
@@ -129,16 +128,16 @@ int main()
     doc.Redo();
     std::println("{}", (void*)doc.GetMetaObject(entity_b));
 
-    // doc.GetObject<B>(entity_b)->Print();
+    doc.GetObject<B>(entity_b)->Print();
 
-    // std::vector cmds{"c"s, "c"s};
-    // doc.ChangePropertyWithNewTransaciton(entity_b, std::span{cmds.begin(), cmds.end()}, 3211);
+    std::vector cmds{"c"s, "c"s};
+    doc.ChangePropertyWithNewTransaciton(entity_b, std::span{cmds.begin(), cmds.end()}, 3211);
 
-    // doc.GetObject<B>(entity_b)->Print();
+    doc.GetObject<B>(entity_b)->Print();
 
-    // doc.Undo();
+    doc.Undo();
 
-    // doc.GetObject<B>(entity_b)->Print();
+    doc.GetObject<B>(entity_b)->Print();
 
     // auto new_any{any->type().from_void(any)};
 
