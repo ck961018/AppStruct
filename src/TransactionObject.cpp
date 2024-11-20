@@ -7,11 +7,6 @@
 
 using namespace entt::literals;
 
-BC_DO_REGISTRATION(TransactionObjectChnImpl);
-BC_DO_REGISTRATION(TransactionObjectSubChn);
-BC_DO_REGISTRATION(TransactionObjectChn);
-BC_DO_REGISTRATION(TransactionObjectAddDel);
-
 TransactionObjectChnImpl::TransactionObjectChnImpl(entt::meta_any&& old_property, entt::meta_any&& new_property)
     : m_old_property{std::move(old_property)}, m_new_property{std::move(new_property)}
 {

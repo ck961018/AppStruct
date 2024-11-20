@@ -5,38 +5,36 @@
 #include "Meta.hpp"
 
 using namespace entt::literals;
+using namespace std::literals;
 
-#define BC_REGISTRATION(t) \
-    template <typename T>  \
-    static void BC_CAT(BCRegister, t)(entt::meta_factory<T> factory)
+template <typename T>
+struct BCAutoRegister;
 
-#define BC_DO_REGISTRATION(t)                                 \
-    static void BC_CAT(BCAutoRegisterReflectionFunction, t)() \
-    {                                                         \
-        static bool is_registered = false;                    \
-        if (is_registered)                                    \
-            return;                                           \
-        is_registered = true;                                 \
-                                                              \
-        entt::meta_factory factory{entt::meta<t>()};          \
-        factory.type(#t##_hs);                                \
-        BC_CAT(BCRegister, t)(factory);                       \
-    }                                                         \
-    namespace                                                 \
-    {                                                         \
-    struct BC_CAT(BCAutoRegister, t)                          \
-    {                                                         \
-        BC_CAT(BCAutoRegister, t)()                           \
-        {                                                     \
-            BC_CAT(BCAutoRegisterReflectionFunction, t)();    \
-        }                                                     \
-    };                                                        \
-    }                                                         \
-    static const BC_CAT(BCAutoRegister, t) BC_CAT(auto_register_, __LINE__)
+#define BC_REGISTRATION(TYPE)                                                          \
+    template <>                                                                        \
+    struct BCAutoRegister<TYPE>                                                        \
+    {                                                                                  \
+        BCAutoRegister(std::string_view name)                                          \
+        {                                                                              \
+            entt::meta_factory factory{entt::meta<TYPE>()};                            \
+            factory.type(entt::hashed_string(name.data(), name.length()));             \
+            BCRegister<TYPE>(factory, name);                                           \
+        }                                                                              \
+                                                                                       \
+        template <typename U>                                                          \
+        static void BCRegister(entt::meta_factory<U>& factory, std::string_view name); \
+    };                                                                                 \
+                                                                                       \
+    inline const BCAutoRegister<TYPE> BC_CAT(auto_register_, TYPE)(BC_CAT(#TYPE, s));  \
+                                                                                       \
+    template <typename U>                                                              \
+    void BCAutoRegister<TYPE>::BCRegister(entt::meta_factory<U>& factory, std::string_view name)
 
-#define BC_REGISTER_BASE(b)     \
-    factory.template base<b>(); \
-    BC_CAT(BCRegister, b)(factory)
+#define BC_REGISTER_BASE(BASE)     \
+    factory.template base<BASE>(); \
+    BCAutoRegister<BASE>::BCRegister(factory, name)
 
-#define BC_REGISTER_PROPERTY(p) factory.template data<&T::p, entt::as_ref_t>(#p##_hs)
-#define BC_REGISTER_FUNCTION(f) factory.template func<&T::f>(#f##_hs)
+#define BC_REGISTER_PROPERTY(p) \
+    factory.template data<&U::p, entt::as_ref_t>(entt::hashed_string(name.data(), name.length()))
+
+#define BC_REGISTER_FUNCTION(f) factory.template func<&U::f>(entt::hashed_string(name.data(), name.length()))

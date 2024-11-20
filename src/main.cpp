@@ -10,6 +10,8 @@
 #include "RTTI.hpp"
 #include "TransactionObject.h"
 
+#include "Test.h"
+
 using namespace entt::literals;
 using namespace std::literals;
 
@@ -87,8 +89,6 @@ BC_REGISTRATION(A)
     BC_REGISTER_FUNCTION(Print);
 }
 
-BC_DO_REGISTRATION(A);
-
 BC_REGISTRATION(B)
 {
     BC_REGISTER_PROPERTY(b);
@@ -99,18 +99,15 @@ BC_REGISTRATION(B)
     BC_REGISTER_BASE(A);
 }
 
-BC_DO_REGISTRATION(B);
-
 BC_REGISTRATION(C)
 {
     BC_REGISTER_PROPERTY(c);
 }
 
-BC_DO_REGISTRATION(C);
-
 int main()
 {
     B b;
+
 
     Document doc;
     auto entity_b{doc.AddObject(std::move(b))};
