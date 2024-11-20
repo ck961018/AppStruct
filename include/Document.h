@@ -51,6 +51,12 @@ public:
 
     void EraseObject(entt::entity entity, bool with_transaction = true);
 
+    template <typename... Ts>
+    auto View()
+    {
+        return registry.view<Ts...>();
+    }
+
     void OpenTransaction();
 
     void CommitTransaciton();

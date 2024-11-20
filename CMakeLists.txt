@@ -12,6 +12,8 @@ set(CMAKE_CXX_STANDARD 23)
 
 # msvc
 add_compile_options(/W4)
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/execution-charset:utf-8>")
 
 # gcc
 # add_compile_options(-Wall -Wextra -Wpedantic)
@@ -26,9 +28,15 @@ include_directories(include)
 add_executable(${PROJECT_NAME} ${SRC_LIST} ${INCLUDE_LIST})
 
 find_package(EnTT REQUIRED)
-target_link_libraries(${PROJECT_NAME} EnTT::EnTT)
+target_link_libraries(${PROJECT_NAME} PRIVATE EnTT::EnTT)
 
 find_package(proxy REQUIRED)
-target_link_libraries(${PROJECT_NAME} msft_proxy)
+target_link_libraries(${PROJECT_NAME} PRIVATE msft_proxy)
+
+find_package(Boost REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE boost::boost)
+
+find_package(pugixml REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE pugixml::pugixml)
 
 # get_target_property(include_dirs ${PROJECT_NAME} INTERFACE_INCLUDE_DIRECTORIES)

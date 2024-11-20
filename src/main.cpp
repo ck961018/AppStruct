@@ -5,12 +5,14 @@
 #include <ranges>
 
 #include <entt/entt.hpp>
+#include <pugixml.hpp>
 
 #include "Document.h"
 #include "RTTI.hpp"
+#include "Serializer.h"
 #include "TransactionObject.h"
 
-#include "Test.h"
+// #include "Test.h"
 
 using namespace entt::literals;
 using namespace std::literals;
@@ -49,8 +51,9 @@ struct C
     int c{77};
 };
 
-struct B : public A
+class B : public A
 {
+public:
     B() = default;
     B(B const&)
     {
@@ -106,46 +109,65 @@ BC_REGISTRATION(C)
 
 int main()
 {
+    // pugi::xml_document doc;
+
+    // // tag::code[]
+    // // add node with some name
+    // pugi::xml_node node = doc.append_child(pugi::node_element);
+    // node.set_name("fdsa");
+    // node.append_attribute("sss") = 32;
+
+    // // add description node with text child
+    // pugi::xml_node descr = doc.append_child("description");
+    // descr.append_child(pugi::node_cdata).set_value("Simple node");
+
+    // // add param node before the description
+    // pugi::xml_node param = doc.insert_child_before("param", descr);
+
+    // // add attributes to param node
+    // param.append_attribute("name") = "version";
+    // param.append_attribute("value") = 1.1;
+    // param.insert_attribute_after("type", param.attribute("name")) = "float";
+    // // end::code[]
+
+    // doc.print(std::cout);
+
     B b;
 
     Document doc;
     auto entity_b{doc.AddObject(std::move(b))};
     auto entity_a{doc.AddObject(A{})};
 
-    std::println("{}, {}", (size_t)entity_b, (size_t)entity_a);
-    std::println("{}, {}", doc.m_undo_stack.size(), doc.m_redo_stack.size());
+    auto xml{Serializer::SaveMeta(&doc)};
+    xml.print(std::cout);
 
-    std::println("{}", (void*)doc.GetMetaObject(entity_a));
-    doc.Undo();
-    std::println("{}", (void*)doc.GetMetaObject(entity_a));
-    doc.Redo();
-    std::println("{}", (void*)doc.GetMetaObject(entity_a));
+    // std::println("{}", (void*)doc.GetMetaObject(entity_a));
+    // doc.Undo();
+    // std::println("{}", (void*)doc.GetMetaObject(entity_a));
+    // doc.Redo();
+    // std::println("{}", (void*)doc.GetMetaObject(entity_a));
 
-    std::println("{}", (void*)doc.GetMetaObject(entity_b));
-    doc.Undo();
-    doc.Undo();
-    std::println("{}", (void*)doc.GetMetaObject(entity_b));
-    doc.Redo();
-    std::println("{}", (void*)doc.GetMetaObject(entity_b));
+    // std::println("{}", (void*)doc.GetMetaObject(entity_b));
+    // doc.Undo();
+    // doc.Undo();
+    // std::println("{}", (void*)doc.GetMetaObject(entity_b));
+    // doc.Redo();
+    // std::println("{}", (void*)doc.GetMetaObject(entity_b));
 
-    doc.GetObject<B>(entity_b)->Print();
+    // doc.GetObject<B>(entity_b)->Print();
 
-    std::vector cmds{"c"s, "c"s};
-    doc.ChangePropertyWithNewTransaciton(entity_b, std::span{cmds.begin(), cmds.end()}, 3211);
+    // std::vector cmds{"c"s, "c"s};
+    // doc.ChangePropertyWithNewTransaciton(entity_b, std::span{cmds.begin(), cmds.end()}, 3211);
 
-    doc.GetObject<B>(entity_b)->Print();
+    // doc.GetObject<B>(entity_b)->Print();
 
-    doc.Undo();
+    // doc.Undo();
 
-    doc.GetObject<B>(entity_b)->Print();
-
-    // auto new_any{any->type().from_void(any)};
-
-    // TransactionObjectChnImpl to{std::move(new_any), "b", 32};
-    // TransactionObjectChn toc{entt::meta_any{}, std::move(to)};
-    // toc.Apply();
-    // auto anyy = doc.FindObject<B>("B");
-    // anyy->Print();
-    // toc.Apply();
-    // anyy->Print();
+    // doc.GetObject<B>(entity_b)->Print();
+    // std::unordered_map<int, int> map{};
+    // auto type{entt::resolve<std::unordered_map<int, int>>()};
+    // auto any{type.from_void(&map)};
+    // std::println("{}", type.is_associative_container());
+    // std::println("{}", type.is_template_specialization());
+    // std::println("{}", any.type().info().name());
 }

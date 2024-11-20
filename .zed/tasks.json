@@ -4,7 +4,7 @@
 [
   {
     "label": "Configure",
-    "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" & conan install . -s build_type=Debug & cmake",
+    "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" & conan install . -s build_type=Debug --build=missing & cmake",
     // "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" & conan install . -s build_type=Release & cmake",
     "args": ["-S", ".", "--preset", "conan-debug"],
     // "args": ["-S", ".", "--preset", "conan-release"],

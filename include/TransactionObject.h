@@ -14,6 +14,7 @@ class Document;
 class TransactionObjectChnImpl
 {
 public:
+TransactionObjectChnImpl() = default;
     TransactionObjectChnImpl(entt::meta_any&& old_property, entt::meta_any&& new_property);
 
     void Apply();
