@@ -82,8 +82,11 @@ public:
         std::print("B: {}, {}: {}, {}: {}, {}: {}\n", (void*)this, (void*)&a, a, (void*)&b, b, (void*)&c, c.c);
     }
 
+private:
     int b{342};
     C c{};
+
+    BC_REGISTER_FRIEND
 };
 
 BC_REGISTRATION(A)
@@ -141,33 +144,33 @@ int main()
     auto xml{Serializer::SaveMeta(&doc)};
     xml.print(std::cout);
 
-    // std::println("{}", (void*)doc.GetMetaObject(entity_a));
-    // doc.Undo();
-    // std::println("{}", (void*)doc.GetMetaObject(entity_a));
-    // doc.Redo();
-    // std::println("{}", (void*)doc.GetMetaObject(entity_a));
+    std::println("{}", (void*)doc.GetMetaObject(entity_a));
+    doc.Undo();
+    std::println("{}", (void*)doc.GetMetaObject(entity_a));
+    doc.Redo();
+    std::println("{}", (void*)doc.GetMetaObject(entity_a));
 
-    // std::println("{}", (void*)doc.GetMetaObject(entity_b));
-    // doc.Undo();
-    // doc.Undo();
-    // std::println("{}", (void*)doc.GetMetaObject(entity_b));
-    // doc.Redo();
-    // std::println("{}", (void*)doc.GetMetaObject(entity_b));
+    std::println("{}", (void*)doc.GetMetaObject(entity_b));
+    doc.Undo();
+    doc.Undo();
+    std::println("{}", (void*)doc.GetMetaObject(entity_b));
+    doc.Redo();
+    std::println("{}", (void*)doc.GetMetaObject(entity_b));
 
-    // doc.GetObject<B>(entity_b)->Print();
+    doc.GetObject<B>(entity_b)->Print();
 
-    // std::vector cmds{"c"s, "c"s};
-    // doc.ChangePropertyWithNewTransaciton(entity_b, std::span{cmds.begin(), cmds.end()}, 3211);
+    std::vector cmds{"c"s, "c"s};
+    doc.ChangePropertyWithNewTransaciton(entity_b, std::span{cmds.begin(), cmds.end()}, 3211);
 
-    // doc.GetObject<B>(entity_b)->Print();
+    doc.GetObject<B>(entity_b)->Print();
 
-    // doc.Undo();
+    doc.Undo();
 
-    // doc.GetObject<B>(entity_b)->Print();
-    // std::unordered_map<int, int> map{};
-    // auto type{entt::resolve<std::unordered_map<int, int>>()};
-    // auto any{type.from_void(&map)};
-    // std::println("{}", type.is_associative_container());
-    // std::println("{}", type.is_template_specialization());
-    // std::println("{}", any.type().info().name());
+    doc.GetObject<B>(entity_b)->Print();
+    std::unordered_map<int, int> map{};
+    auto type{entt::resolve<std::unordered_map<int, int>>()};
+    auto any{type.from_void(&map)};
+    std::println("{}", type.is_associative_container());
+    std::println("{}", type.is_template_specialization());
+    std::println("{}", any.type().info().name());
 }
